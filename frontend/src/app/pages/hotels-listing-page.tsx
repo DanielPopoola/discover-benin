@@ -11,11 +11,11 @@ export function HotelsListingPage() {
   const [selectedCity, setSelectedCity] = useState<string>("All");
   const [selectedStars, setSelectedStars] = useState<string>("All");
   const [selectedPrice, setSelectedPrice] = useState<string>("All");
-  const [visibleCount, setVisibleCount] = useState(8);
+  const [visibleCount, setVisibleCount] = useState(4);
 
-  const setCity  = (v: string) => { setSelectedCity(v);  setVisibleCount(8); };
-  const setStars = (v: string) => { setSelectedStars(v); setVisibleCount(8); };
-  const setPrice = (v: string) => { setSelectedPrice(v); setVisibleCount(8); };
+  const setCity  = (v: string) => { setSelectedCity(v);  setVisibleCount(4); };
+  const setStars = (v: string) => { setSelectedStars(v); setVisibleCount(4); };
+  const setPrice = (v: string) => { setSelectedPrice(v); setVisibleCount(4); };
 
   const filteredHotels = hotels.filter((hotel) => {
     const cityMatch = selectedCity === "All" || hotel.city === selectedCity;
