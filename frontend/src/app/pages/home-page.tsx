@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLang } from "../context/LanguageContext";
 import { Link } from "react-router";
 import { Navigation } from "../components/navigation";
 import { Footer } from "../components/footer";
@@ -21,9 +22,11 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
+import { attractions } from "../data/attractions";
 
 export function HomePage() {
   const [scrollY, setScrollY] = useState(0);
+  const { t } = useLang();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -221,53 +224,20 @@ export function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
-            {/* Featured Card - Spans 2 columns */}
-            <DestinationCard
-              image="https://images.unsplash.com/photo-1729359035276-189519a4b072?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBZnJpY2FuJTIwc2F2YW5uYSUyMHdpbGRsaWZlfGVufDF8fHx8MTc3MzQzNzM4OXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-              badge="UNESCO Reserve"
-              location="Pendjari National Park"
-              region="North Benin"
-              rating={4.9}
-              time="4-5 hours"
-              featured
-            />
-
-            <DestinationCard
-              image="https://images.unsplash.com/photo-1718766304636-cb9309953a55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxDb3Rvbm91JTIwQmVuaW4lMjBjaXR5c2NhcGV8ZW58MXx8fHwxNzczNDM3Mzg4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-              badge="City"
-              location="Cotonou"
-              region="Economic Capital"
-              rating={4.6}
-              time="1-2 days"
-            />
-
-            <DestinationCard
-              image="https://images.unsplash.com/photo-1753872780884-12521c336c50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxXZXN0JTIwQWZyaWNhJTIwYmVhY2glMjBwYWxtfGVufDF8fHx8MTc3MzQzNzM4OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-              badge="Beach"
-              location="Grand Popo"
-              region="South Coast"
-              rating={4.7}
-              time="2-3 hours"
-            />
-
-            <DestinationCard
-              image="https://images.unsplash.com/photo-1566585747350-ddd59837d1b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxBZnJpY2FuJTIwaGlzdG9yaWNhbCUyMG1vbnVtZW50fGVufDF8fHx8MTc3MzQzNzM5NHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-              badge="Heritage"
-              location="Ouidah"
-              region="Historical City"
-              rating={4.8}
-              time="3-4 hours"
-            />
-
-            <DestinationCard
-              image="https://images.unsplash.com/photo-1668609268461-4f6a15269ff1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxXZXN0JTIwQWZyaWNhbiUyMHRyYWRpdGlvbmFsJTIwYXJjaGl0ZWN0dXJlfGVufDF8fHx8MTc3MzQzNzM4OXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-              badge="Royal Palace"
-              location="Abomey"
-              region="Central Benin"
-              rating={4.9}
-              time="2-3 hours"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {attractions.map((dest, i) => (
+              <DestinationCard
+                key={dest.id}
+                id={dest.id}
+                image={dest.image}
+                badge={dest.badge}
+                location={dest.name}
+                region={dest.region}
+                rating={dest.rating}
+                time={dest.travelTime}
+                featured={i === 0}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -782,11 +752,11 @@ function DestinationCard({
   featured?: boolean;
 }) {
   return (
-    <Link to="/attractions/pendjari">
+    <Link to={`/attractions/${location.toLowerCase().replace(/ /g, "-")}`}>
       <motion.div
         whileHover={{ y: -6 }}
         className={`group rounded-2xl overflow-hidden border border-[rgba(92,58,30,0.15)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-all cursor-pointer ${
-          featured ? "lg:col-span-6" : "lg:col-span-3"
+          featured ? "lg:col-span-2" : "lg:col-span-1"
         }`}
       >
         <div className={`relative ${featured ? "h-80" : "h-64"} overflow-hidden`}>

@@ -1,7 +1,9 @@
 import { Link } from "react-router";
+import { useLang } from "../context/LanguageContext";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 
 export function Footer() {
+  const { t } = useLang();
   return (
     <footer className="bg-[#1A1A1A] text-white">
       <div className="border-t border-white/8" />
@@ -69,7 +71,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  to="/#attractions"
+                  to="/attractions"
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >

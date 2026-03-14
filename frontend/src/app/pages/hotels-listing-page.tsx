@@ -1,97 +1,39 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import { Navigation } from "../components/navigation";
 import { Footer } from "../components/footer";
 import { MapPin, Star } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { motion } from "motion/react";
+import { hotels } from "../data/hotels";
 
 export function HotelsListingPage() {
   const [selectedCity, setSelectedCity] = useState<string>("All");
   const [selectedStars, setSelectedStars] = useState<string>("All");
   const [selectedPrice, setSelectedPrice] = useState<string>("All");
+  const [visibleCount, setVisibleCount] = useState(8);
 
-  const hotels = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1575999080555-3f7a698dd8d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMHJlc29ydCUyMEFmcmljYXxlbnwxfHx8fDE3NzM0MzczOTB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Golden Tulip Le Diplomate",
-      city: "Cotonou",
-      price: 120,
-      rating: 4.8,
-      stars: 5,
-      reviews: 245,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1683914791878-4d3132794594?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhvdGVsJTIwdHJvcGljYWx8ZW58MXx8fHwxNzczNDM3MzkxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Azalaï Hotel de la Plage",
-      city: "Cotonou",
-      price: 95,
-      rating: 4.6,
-      stars: 4,
-      reviews: 182,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1772064901543-fb4a5d9f4736?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb2FzdGFsJTIwcmVzb3J0JTIwcG9vbHxlbnwxfHx8fDE3NzM0MzczOTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Hotel Maison Rouge",
-      city: "Porto-Novo",
-      price: 75,
-      rating: 4.5,
-      stars: 4,
-      reviews: 128,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1509647924673-bbb53e22eeb8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3RlbCUyMGJlZHJvb20lMjBsdXh1cnl8ZW58MXx8fHwxNzczNDM3Mzk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Benin Marina Hotel",
-      city: "Cotonou",
-      price: 110,
-      rating: 4.7,
-      stars: 4,
-      reviews: 203,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1558117338-aa433feb1c62?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cm9waWNhbCUyMGJlYWNoJTIwcmVzb3J0fGVufDF8fHx8MTc3MzM3MDc3OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Grand Popo Beach Resort",
-      city: "Grand Popo",
-      price: 85,
-      rating: 4.6,
-      stars: 3,
-      reviews: 156,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1729673766770-83160c576668?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHBvb2wlMjBsdXh1cnklMjByZXNvcnR8ZW58MXx8fHwxNzczNDM3Nzk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Auberge de Grand Popo",
-      city: "Grand Popo",
-      price: 65,
-      rating: 4.4,
-      stars: 3,
-      reviews: 94,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1664908790579-34b71154f603?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhvdGVsJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzczNDM3Nzk1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Hotel du Port",
-      city: "Porto-Novo",
-      price: 80,
-      rating: 4.5,
-      stars: 3,
-      reviews: 167,
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1759462692354-404b2c995c99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGxvYmJ5JTIwZWxlZ2FudHxlbnwxfHx8fDE3NzMzNTA5NzV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      name: "Novotel Cotonou Orisha",
-      city: "Cotonou",
-      price: 135,
-      rating: 4.9,
-      stars: 5,
-      reviews: 312,
-    },
-  ];
+  const setCity  = (v: string) => { setSelectedCity(v);  setVisibleCount(8); };
+  const setStars = (v: string) => { setSelectedStars(v); setVisibleCount(8); };
+  const setPrice = (v: string) => { setSelectedPrice(v); setVisibleCount(8); };
+
+  const filteredHotels = hotels.filter((hotel) => {
+    const cityMatch = selectedCity === "All" || hotel.city === selectedCity;
+
+    const starCount = parseInt(selectedStars);
+    const starsMatch = selectedStars === "All" || hotel.stars === starCount;
+
+    const priceMatch =
+      selectedPrice === "All" ||
+      (selectedPrice === "Under €80" && hotel.price < 80) ||
+      (selectedPrice === "€80-€120" && hotel.price >= 80 && hotel.price <= 120) ||
+      (selectedPrice === "Over €120" && hotel.price > 120);
+
+    return cityMatch && starsMatch && priceMatch;
+  });
+
+  const visibleHotels = filteredHotels.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredHotels.length;
 
   return (
     <div className="min-h-screen bg-white">
@@ -130,7 +72,7 @@ export function HotelsListingPage() {
               {["All", "Cotonou", "Porto-Novo", "Grand Popo"].map((city) => (
                 <button
                   key={city}
-                  onClick={() => setSelectedCity(city)}
+                  onClick={() => setCity(city)}
                   className={`px-5 py-2.5 rounded-full transition-all ${
                     selectedCity === city
                       ? "bg-[#C4622D] text-white"
@@ -148,7 +90,7 @@ export function HotelsListingPage() {
               {["All", "5 Stars", "4 Stars", "3 Stars"].map((stars) => (
                 <button
                   key={stars}
-                  onClick={() => setSelectedStars(stars)}
+                  onClick={() => setStars(stars)}
                   className={`px-5 py-2.5 rounded-full transition-all ${
                     selectedStars === stars
                       ? "bg-[#C4622D] text-white"
@@ -166,7 +108,7 @@ export function HotelsListingPage() {
               {["All", "Under €80", "€80-€120", "Over €120"].map((price) => (
                 <button
                   key={price}
-                  onClick={() => setSelectedPrice(price)}
+                  onClick={() => setPrice(price)}
                   className={`px-5 py-2.5 rounded-full transition-all ${
                     selectedPrice === price
                       ? "bg-[#C4622D] text-white"
@@ -185,97 +127,124 @@ export function HotelsListingPage() {
       {/* Hotels Grid */}
       <section className="py-16 bg-white">
         <div className="max-w-[1280px] mx-auto px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {hotels.map((hotel, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                whileHover={{ y: -6 }}
-                className="group rounded-2xl overflow-hidden border border-[rgba(92,58,30,0.15)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-all bg-white"
+
+          {/* Result count */}
+          <p
+            className="text-[#5C3A1E]/60 mb-8 text-sm"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {filteredHotels.length} hotel{filteredHotels.length !== 1 ? "s" : ""} found
+          </p>
+
+          {/* Empty state */}
+          {filteredHotels.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-24 gap-4">
+              <div className="text-5xl">🏨</div>
+              <p
+                className="text-[#5C3A1E]/70 text-lg"
+                style={{ fontFamily: "var(--font-display)" }}
               >
-                <div className="relative h-48 overflow-hidden">
-                  <ImageWithFallback
-                    src={hotel.image}
-                    alt={hotel.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-4 left-4 flex gap-1">
-                    {Array.from({ length: hotel.stars }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className="text-[#D4A827] fill-[#D4A827]"
-                        size={12}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3
-                    className="text-[#1A1A1A] mb-2 line-clamp-1"
-                    style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
+                No hotels match your filters
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedCity("All");
+                  setSelectedStars("All");
+                  setSelectedPrice("All");
+                }}
+                className="text-[#C4622D] underline text-sm"
+                style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
+              >
+                Clear all filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {visibleHotels.map((hotel, i) => (
+                <Link key={hotel.id} to={`/hotels/${hotel.id}`} className="block">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                    whileHover={{ y: -6 }}
+                    className="group rounded-2xl overflow-hidden border border-[rgba(92,58,30,0.15)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-all bg-white cursor-pointer"
                   >
-                    {hotel.name}
-                  </h3>
-                  <div className="flex items-center gap-2 text-[#5C3A1E]/70 mb-4">
-                    <MapPin size={14} />
-                    <span
-                      style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
+                  <div className="relative h-48 overflow-hidden">
+                    <ImageWithFallback
+                      src={hotel.image}
+                      alt={hotel.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute bottom-4 left-4 flex gap-1">
+                      {Array.from({ length: hotel.stars }).map((_, i) => (
+                        <Star key={i} className="text-[#D4A827] fill-[#D4A827]" size={12} />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3
+                      className="text-[#1A1A1A] mb-2 line-clamp-1"
+                      style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
                     >
-                      {hotel.city}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span
-                        className="text-[#1A1A1A]"
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          fontSize: "20px",
-                        }}
-                      >
-                        €{hotel.price}
-                      </span>
-                      <span
-                        className="text-[#5C3A1E]/70 text-sm"
-                        style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
-                      >
-                        /night
+                      {hotel.name}
+                    </h3>
+                    <div className="flex items-center gap-2 text-[#5C3A1E]/70 mb-4">
+                      <MapPin size={14} />
+                      <span style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
+                        {hotel.city}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Star
-                        className="text-[#D4A827] fill-[#D4A827]"
-                        size={14}
-                      />
-                      <span
-                        className="text-[#1A1A1A]"
-                        style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
-                      >
-                        {hotel.rating}
-                      </span>
-                      <span
-                        className="text-[#5C3A1E]/70 text-xs"
-                        style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
-                      >
-                        ({hotel.reviews})
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span
+                          className="text-[#1A1A1A]"
+                          style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}
+                        >
+                          €{hotel.price}
+                        </span>
+                        <span
+                          className="text-[#5C3A1E]/70 text-sm"
+                          style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
+                        >
+                          /night
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="text-[#D4A827] fill-[#D4A827]" size={14} />
+                        <span
+                          className="text-[#1A1A1A]"
+                          style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
+                        >
+                          {hotel.rating}
+                        </span>
+                        <span
+                          className="text-[#5C3A1E]/70 text-xs"
+                          style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
+                        >
+                          ({hotel.reviews})
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Load More */}
-          <div className="text-center mt-12">
-            <button className="bg-white text-[#C4622D] border-2 border-[#C4622D] px-8 py-3 rounded-lg hover:bg-[#C4622D] hover:text-white transition-colors">
-              <span style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                Load More Hotels
-              </span>
-            </button>
-          </div>
+          {hasMore && (
+            <div className="text-center mt-12">
+              <button
+                onClick={() => setVisibleCount((c) => c + 4)}
+                className="bg-white text-[#C4622D] border-2 border-[#C4622D] px-8 py-3 rounded-lg hover:bg-[#C4622D] hover:text-white transition-colors"
+              >
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
+                  Load More Hotels ({filteredHotels.length - visibleCount} remaining)
+                </span>
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
