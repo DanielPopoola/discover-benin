@@ -8,8 +8,13 @@ import { motion } from "motion/react";
 import { Skeleton } from "../components/ui/skeleton";
 import { getRestaurants } from "../../lib/api";
 import type { Restaurant } from "../data/restaurants";
+import { useLang } from "../context/LanguageContext";
 
 export function RestaurantsPage() {
+  const { lang } = useLang();
+  const tr = lang === "FR"
+    ? { all: "Tous", culinary: "Cuisine", title: "Saveurs locales", subtitle: "Des restaurants lacustres aux terrasses en rooftop : découvrez la cuisine béninoise authentique.", city: "Ville", cuisine: "Cuisine", found: "trouvés", noMatch: "Aucun restaurant ne correspond à vos filtres", clear: "Réinitialiser les filtres", try: "À goûter :", dining: "Restauration" }
+    : { all: "All", culinary: "Culinary", title: "Local Flavours", subtitle: "From floating lake restaurants to rooftop terraces — authentic Beninese cuisine and dining experiences.", city: "City", cuisine: "Cuisine", found: "found", noMatch: "No restaurants match your filters", clear: "Clear all filters", try: "Try:", dining: "Dining" };
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState("All");
@@ -41,13 +46,11 @@ export function RestaurantsPage() {
         <div className="max-w-[1280px] mx-auto px-8 relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-0.5 bg-[#D4A827]" />
-            <span className="text-[#D4A827] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", fontSize: "11px" }}>Dining</span>
+            <span className="text-[#D4A827] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", fontSize: "11px" }}>{tr.dining}</span>
           </div>
-          <h1 className="text-white mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(32px, 5vw, 56px)" }}>
-            Local <em>Flavours</em>
-          </h1>
+          <h1 className="text-white mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(32px, 5vw, 56px)" }}>{tr.title}</h1>
           <p className="text-white/70 max-w-xl" style={{ fontFamily: "var(--font-body)", fontWeight: 300, lineHeight: 1.7 }}>
-            From floating lake restaurants to rooftop terraces — authentic Beninese cuisine and dining experiences.
+            {tr.subtitle}
           </p>
         </div>
       </section>
@@ -55,22 +58,22 @@ export function RestaurantsPage() {
       <section className="bg-white border-b border-[rgba(92,58,30,0.1)] sticky top-20 z-40">
         <div className="max-w-[1280px] mx-auto px-8 py-4 flex flex-wrap gap-6 items-center">
           <div className="flex flex-wrap gap-2 items-center">
-            <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>City</span>
+            <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>{tr.city}</span>
             {cities.map((city) => (
-              <button key={city} onClick={() => setSelectedCity(city)}
+              <button key={city === "All" ? tr.all : city} onClick={() => setSelectedCity(city)}
                 className={`px-4 py-1.5 rounded-full text-sm transition-all ${selectedCity === city ? "bg-[#C4622D] text-white" : "bg-[#F5EFE0] text-[#5C3A1E] hover:bg-[#C4622D]/10"}`}
                 style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                {city}
+                {city === "All" ? tr.all : city}
               </button>
             ))}
           </div>
           <div className="flex flex-wrap gap-2 items-center">
-            <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>Cuisine</span>
+            <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)" }}>{tr.cuisine}</span>
             {cuisines.map((cuisine) => (
-              <button key={cuisine} onClick={() => setSelectedCuisine(cuisine)}
+              <button key={cuisine === "All" ? tr.all : cuisine} onClick={() => setSelectedCuisine(cuisine)}
                 className={`px-4 py-1.5 rounded-full text-sm transition-all ${selectedCuisine === cuisine ? "bg-[#2D5016] text-white" : "bg-[#F5EFE0] text-[#5C3A1E] hover:bg-[#2D5016]/10"}`}
                 style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                {cuisine}
+                {cuisine === "All" ? tr.all : cuisine}
               </button>
             ))}
           </div>
@@ -96,16 +99,16 @@ export function RestaurantsPage() {
           ) : (
             <>
               <p className="text-[#5C3A1E]/60 mb-8 text-sm" style={{ fontFamily: "var(--font-body)" }}>
-                {filtered.length} restaurant{filtered.length !== 1 ? "s" : ""} found
+                {filtered.length} {lang === "FR" ? "restaurant" : "restaurant"}{filtered.length !== 1 ? "s" : ""} {tr.found}
               </p>
 
               {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 gap-4">
                   <div className="text-6xl">🍽️</div>
-                  <p className="text-[#5C3A1E]/70 text-lg" style={{ fontFamily: "var(--font-display)" }}>No restaurants match your filters</p>
+                  <p className="text-[#5C3A1E]/70 text-lg" style={{ fontFamily: "var(--font-display)" }}>{tr.noMatch}</p>
                   <button onClick={() => { setSelectedCity("All"); setSelectedCuisine("All"); }}
                     className="text-[#C4622D] underline text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                    Clear all filters
+                    {tr.clear}
                   </button>
                 </div>
               ) : (
@@ -134,7 +137,7 @@ export function RestaurantsPage() {
                           </p>
                           <div className="flex items-center justify-between pt-3 border-t border-[rgba(92,58,30,0.1)]">
                             <div className="text-xs text-[#5C3A1E]/60" style={{ fontFamily: "var(--font-body)" }}>
-                              <span className="font-semibold text-[#1A1A1A]">Try: </span>{r.specialty}
+                              <span className="font-semibold text-[#1A1A1A]">{tr.try} </span>{r.specialty}
                             </div>
                             <div className="flex items-center gap-1">
                               <Star className="text-[#D4A827] fill-[#D4A827]" size={14} />

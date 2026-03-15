@@ -3,7 +3,48 @@ import { useLang } from "../context/LanguageContext";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 
 export function Footer() {
-  const { t } = useLang();
+  const { lang } = useLang();
+  const copy = lang === "FR"
+    ? {
+        desc: "Explorez la riche culture, les paysages exceptionnels et le patrimoine vivant de la République du Bénin, en Afrique de l'Ouest.",
+        discover: "Découvrir",
+        topAttractions: "Attractions principales",
+        events: "Événements et festivals",
+        plan: "Planifier votre voyage",
+        travelGuide: "Guide voyage",
+        gettingAround: "Se déplacer",
+        visa: "Informations visa",
+        safety: "Conseils sécurité",
+        about: "À propos",
+        contactUs: "Nous contacter",
+        aboutBenin: "À propos du Bénin",
+        press: "Presse et médias",
+        partnerships: "Partenariats",
+        rights: "© 2026 Discover Benin. Tous droits réservés.",
+        privacy: "Politique de confidentialité",
+        terms: "Conditions d'utilisation",
+        cookies: "Politique des cookies",
+      }
+    : {
+        desc: "Explore the rich culture, stunning landscapes, and vibrant heritage of the Republic of Benin, West Africa.",
+        discover: "Discover",
+        topAttractions: "Top Attractions",
+        events: "Events & Festivals",
+        plan: "Plan Your Trip",
+        travelGuide: "Travel Guide",
+        gettingAround: "Getting Around",
+        visa: "Visa Information",
+        safety: "Safety Tips",
+        about: "About",
+        contactUs: "Contact Us",
+        aboutBenin: "About Benin",
+        press: "Press & Media",
+        partnerships: "Partnerships",
+        rights: "© 2026 Discover Benin. All rights reserved.",
+        privacy: "Privacy Policy",
+        terms: "Terms of Service",
+        cookies: "Cookie Policy",
+      };
   return (
     <footer className="bg-[#1A1A1A] text-white">
       <div className="border-t border-white/8" />
@@ -29,8 +70,7 @@ export function Footer() {
               className="text-white/70 leading-relaxed max-w-xs"
               style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
             >
-              Explore the rich culture, stunning landscapes, and vibrant heritage
-              of the Republic of Benin, West Africa.
+              {copy.desc}
             </p>
             <div className="flex gap-3 mt-6">
               <a
@@ -66,7 +106,7 @@ export function Footer() {
               className="mb-4"
               style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
             >
-              Discover
+              {copy.discover}
             </h4>
             <ul className="space-y-3">
               <li>
@@ -75,7 +115,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Top Attractions
+                  {copy.topAttractions}
                 </Link>
               </li>
               <li>
@@ -102,7 +142,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Events & Festivals
+                  {copy.events}
                 </Link>
               </li>
             </ul>
@@ -114,7 +154,7 @@ export function Footer() {
               className="mb-4"
               style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
             >
-              Plan Your Trip
+              {copy.plan}
             </h4>
             <ul className="space-y-3">
               <li>
@@ -123,7 +163,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Travel Guide
+                  {copy.travelGuide}
                 </Link>
               </li>
               <li>
@@ -132,7 +172,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Getting Around
+                  {copy.gettingAround}
                 </Link>
               </li>
               <li>
@@ -141,7 +181,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Visa Information
+                  {copy.visa}
                 </Link>
               </li>
               <li>
@@ -150,7 +190,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Safety Tips
+                  {copy.safety}
                 </Link>
               </li>
             </ul>
@@ -162,7 +202,7 @@ export function Footer() {
               className="mb-4"
               style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
             >
-              About
+              {copy.about}
             </h4>
             <ul className="space-y-3">
               <li>
@@ -171,7 +211,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Contact Us
+                  {copy.contactUs}
                 </Link>
               </li>
               <li>
@@ -180,7 +220,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  About Benin
+                  {copy.aboutBenin}
                 </a>
               </li>
               <li>
@@ -189,7 +229,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Press & Media
+                  {copy.press}
                 </a>
               </li>
               <li>
@@ -198,7 +238,7 @@ export function Footer() {
                   className="text-white/70 hover:text-white transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
                 >
-                  Partnerships
+                  {copy.partnerships}
                 </a>
               </li>
             </ul>
@@ -211,7 +251,7 @@ export function Footer() {
             className="text-white/60 text-sm"
             style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
           >
-            © 2026 Discover Benin. All rights reserved.
+            {copy.rights}
           </p>
           <div className="flex gap-6">
             <a
@@ -219,21 +259,21 @@ export function Footer() {
               className="text-white/60 hover:text-white text-sm transition-colors"
               style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
             >
-              Privacy Policy
+              {copy.privacy}
             </a>
             <a
               href="#"
               className="text-white/60 hover:text-white text-sm transition-colors"
               style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
             >
-              Terms of Service
+              {copy.terms}
             </a>
             <a
               href="#"
               className="text-white/60 hover:text-white text-sm transition-colors"
               style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}
             >
-              Cookie Policy
+              {copy.cookies}
             </a>
           </div>
         </div>

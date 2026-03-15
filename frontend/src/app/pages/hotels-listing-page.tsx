@@ -8,6 +8,7 @@ import { motion } from "motion/react";
 import { Skeleton } from "../components/ui/skeleton";
 import { getHotels } from "../../lib/api";
 import type { Hotel } from "../data/hotels";
+import { useLang } from "../context/LanguageContext";
 
 const PRICE_FILTERS: Record<string, { min?: number; max?: number }> = {
   "Under €80": { max: 79 },
@@ -15,7 +16,44 @@ const PRICE_FILTERS: Record<string, { min?: number; max?: number }> = {
   "Over €120": { min: 121 },
 };
 
+const COPY = {
+  EN: {
+    all: "All",
+    accommodation: "Accommodation",
+    title: "Hotels in Benin",
+    subtitle: "From luxury resorts to boutique hotels, find the perfect place to stay during your visit to Benin.",
+    starsLabel: "Stars",
+    pricesLabel: "Budget",
+    stars: ["All", "5 Stars", "4 Stars", "3 Stars"],
+    prices: ["All", "Under €80", "€80-€120", "Over €120"],
+    found: "found",
+    noMatch: "No hotels match your filters",
+    clear: "Clear all filters",
+    perNight: "/night",
+    loadMore: "Load More Hotels",
+    remaining: "remaining",
+  },
+  FR: {
+    all: "Tous",
+    accommodation: "Hébergement",
+    title: "Hôtels au Bénin",
+    subtitle: "Des complexes de luxe aux hôtels boutiques, trouvez l'hébergement idéal pour votre voyage au Bénin.",
+    starsLabel: "Étoiles",
+    pricesLabel: "Budget",
+    stars: ["Tous", "5 étoiles", "4 étoiles", "3 étoiles"],
+    prices: ["Tous", "Moins de 80 €", "80 €-120 €", "Plus de 120 €"],
+    found: "trouvés",
+    noMatch: "Aucun hôtel ne correspond à vos filtres",
+    clear: "Réinitialiser les filtres",
+    perNight: "/nuit",
+    loadMore: "Afficher plus d'hôtels",
+    remaining: "restants",
+  },
+} as const;
+
 export function HotelsListingPage() {
+  const { lang } = useLang();
+  const copy = COPY[lang];
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState("All");
@@ -56,40 +94,49 @@ export function HotelsListingPage() {
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-0.5 bg-[#C4622D]" />
-            <span className="text-[#C4622D] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", fontSize: "11px" }}>Accommodation</span>
+            <span className="text-[#C4622D] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", fontSize: "11px" }}>{copy.accommodation}</span>
           </div>
-          <h1 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "48px" }}>Hotels in Benin</h1>
+          <h1 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "48px" }}>{copy.title}</h1>
           <p className="text-[#5C3A1E]/70 max-w-2xl leading-relaxed" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
-            From luxury resorts to boutique hotels, find the perfect place to stay during your visit to Benin.
+            {copy.subtitle}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
             <div className="flex gap-2">
-              {["All", "Cotonou", "Porto-Novo", "Grand Popo"].map((city) => (
-                <button key={city} onClick={() => setCity(city)}
-                  className={`px-5 py-2.5 rounded-full transition-all ${selectedCity === city ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
+              {[
+                { value: "All", label: copy.all },
+                { value: "Cotonou", label: "Cotonou" },
+                { value: "Porto-Novo", label: "Porto-Novo" },
+                { value: "Grand Popo", label: "Grand Popo" },
+              ].map((city) => (
+                <button key={city.value} onClick={() => setCity(city.value)}
+                  className={`px-5 py-2.5 rounded-full transition-all ${selectedCity === city.value ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
                   style={{ fontFamily: "var(--font-body)", fontWeight: 400 }}>
-                  {city}
+                  {city.label}
                 </button>
               ))}
             </div>
             <div className="flex gap-2">
-              {["All", "5 Stars", "4 Stars", "3 Stars"].map((stars) => (
-                <button key={stars} onClick={() => setStars(stars)}
-                  className={`px-5 py-2.5 rounded-full transition-all ${selectedStars === stars ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
+              {copy.stars.map((stars, i) => {
+                const value = i === 0 ? "All" : `${6 - i} Stars`;
+                return (
+                <button key={stars} onClick={() => setStars(value)}
+                  className={`px-5 py-2.5 rounded-full transition-all ${selectedStars === value ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
                   style={{ fontFamily: "var(--font-body)", fontWeight: 400 }}>
                   {stars}
                 </button>
-              ))}
+              )})}
             </div>
             <div className="flex gap-2">
-              {["All", "Under €80", "€80-€120", "Over €120"].map((price) => (
-                <button key={price} onClick={() => setPrice(price)}
-                  className={`px-5 py-2.5 rounded-full transition-all ${selectedPrice === price ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
+              {copy.prices.map((price, i) => {
+                const value = i === 0 ? "All" : ["Under €80", "€80-€120", "Over €120"][i - 1];
+                return (
+                <button key={price} onClick={() => setPrice(value)}
+                  className={`px-5 py-2.5 rounded-full transition-all ${selectedPrice === value ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
                   style={{ fontFamily: "var(--font-body)", fontWeight: 400 }}>
                   {price}
                 </button>
-              ))}
+              )})}
             </div>
           </div>
         </div>
@@ -113,16 +160,16 @@ export function HotelsListingPage() {
           ) : (
             <>
               <p className="text-[#5C3A1E]/60 mb-8 text-sm" style={{ fontFamily: "var(--font-body)" }}>
-                {filtered.length} hotel{filtered.length !== 1 ? "s" : ""} found
+                {filtered.length} {lang === "FR" ? "hôtel" : "hotel"}{filtered.length !== 1 ? "s" : ""} {copy.found}
               </p>
 
               {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 gap-4">
                   <div className="text-5xl">🏨</div>
-                  <p className="text-[#5C3A1E]/70 text-lg" style={{ fontFamily: "var(--font-display)" }}>No hotels match your filters</p>
+                  <p className="text-[#5C3A1E]/70 text-lg" style={{ fontFamily: "var(--font-display)" }}>{copy.noMatch}</p>
                   <button onClick={() => { setSelectedCity("All"); setSelectedStars("All"); setSelectedPrice("All"); }}
                     className="text-[#C4622D] underline text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                    Clear all filters
+                    {copy.clear}
                   </button>
                 </div>
               ) : (
@@ -150,7 +197,7 @@ export function HotelsListingPage() {
                           <div className="flex items-center justify-between">
                             <div>
                               <span className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>€{hotel.price}</span>
-                              <span className="text-[#5C3A1E]/70 text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>/night</span>
+                              <span className="text-[#5C3A1E]/70 text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{copy.perNight}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Star className="text-[#D4A827] fill-[#D4A827]" size={14} />
@@ -170,7 +217,7 @@ export function HotelsListingPage() {
                   <button onClick={() => setVisibleCount((c) => c + 4)}
                     className="bg-white text-[#C4622D] border-2 border-[#C4622D] px-8 py-3 rounded-lg hover:bg-[#C4622D] hover:text-white transition-colors">
                     <span style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                      Load More Hotels ({filtered.length - visibleCount} remaining)
+                      {copy.loadMore} ({filtered.length - visibleCount} {copy.remaining})
                     </span>
                   </button>
                 </div>
