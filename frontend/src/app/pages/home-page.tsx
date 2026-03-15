@@ -792,7 +792,7 @@ function DestinationCard({
   featured?: boolean;
 }) {
   return (
-    <Link to={`/attractions/${location.toLowerCase().replace(/ /g, "-")}`}>
+    <Link to={`/attractions/${id}`}>
       <motion.div
         whileHover={{ y: -6 }}
         className={`group rounded-2xl overflow-hidden border border-[rgba(92,58,30,0.15)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-all cursor-pointer ${

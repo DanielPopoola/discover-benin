@@ -12,6 +12,16 @@ import type { Restaurant } from "../app/data/restaurants";
 const BASE = "/api";
 
 // ---------------------------------------------------------------------------
+// Normaliser
+// The API returns `slug` as the primary key. The TypeScript interfaces
+// (and all page components) use `id`. This function maps slug → id once,
+// at the boundary, so nothing else in the app needs to know about it.
+// ---------------------------------------------------------------------------
+function normalise<T extends { slug: string }>(raw: T): T & { id: string } {
+  return { ...raw, id: raw.slug };
+}
+
+// ---------------------------------------------------------------------------
 // Attractions
 // ---------------------------------------------------------------------------
 export async function getAttractions(params?: {
@@ -23,15 +33,15 @@ export async function getAttractions(params?: {
   if (params?.region) qs.set("region", params.region);
   const res = await fetch(`${BASE}/attractions?${qs}`);
   if (!res.ok) throw new Error("Failed to fetch attractions");
-  return res.json();
+  const data: Attraction[] = await res.json();
+  return data.map(normalise);
 }
 
 export async function getAttraction(slug: string): Promise<Attraction> {
   const res = await fetch(`${BASE}/attractions/${slug}`);
   if (!res.ok) throw new Error(`Attraction not found: ${slug}`);
-  return res.json();
+  return normalise(await res.json());
 }
-
 
 // ---------------------------------------------------------------------------
 // Hotels
@@ -49,13 +59,14 @@ export async function getHotels(params?: {
   if (params?.max_price != null) qs.set("max_price", String(params.max_price));
   const res = await fetch(`${BASE}/hotels?${qs}`);
   if (!res.ok) throw new Error("Failed to fetch hotels");
-  return res.json();
+  const data: Hotel[] = await res.json();
+  return data.map(normalise);
 }
 
 export async function getHotel(slug: string): Promise<Hotel> {
   const res = await fetch(`${BASE}/hotels/${slug}`);
   if (!res.ok) throw new Error(`Hotel not found: ${slug}`);
-  return res.json();
+  return normalise(await res.json());
 }
 
 // ---------------------------------------------------------------------------
@@ -70,13 +81,14 @@ export async function getRestaurants(params?: {
   if (params?.cuisine) qs.set("cuisine", params.cuisine);
   const res = await fetch(`${BASE}/restaurants?${qs}`);
   if (!res.ok) throw new Error("Failed to fetch restaurants");
-  return res.json();
+  const data: Restaurant[] = await res.json();
+  return data.map(normalise);
 }
 
 export async function getRestaurant(slug: string): Promise<Restaurant> {
   const res = await fetch(`${BASE}/restaurants/${slug}`);
   if (!res.ok) throw new Error(`Restaurant not found: ${slug}`);
-  return res.json();
+  return normalise(await res.json());
 }
 
 // ---------------------------------------------------------------------------
