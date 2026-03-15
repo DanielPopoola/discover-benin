@@ -3,11 +3,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models import Hotel
+from app.schemas import HotelRead
 
 router = APIRouter(prefix="/api/hotels", tags=["hotels"])
 
 
-@router.get("", response_model=list[Hotel])
+@router.get("", response_model=list[HotelRead], response_model_by_alias=True)
 def list_hotels(
     city: Optional[str] = None,
     stars: Optional[int] = None,
@@ -27,7 +28,7 @@ def list_hotels(
     return session.exec(query).all()
 
 
-@router.get("/{slug}", response_model=Hotel)
+@router.get("/{slug}", response_model=HotelRead, response_model_by_alias=True)
 def get_hotel(slug: str, session: Session = Depends(get_session)):
     hotel = session.get(Hotel, slug)
     if not hotel:

@@ -1,29 +1,49 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { Navigation } from "../components/navigation";
 import { Footer } from "../components/footer";
-import {
-  MapPin, Star, Clock, ChevronRight, Home,
-  Hotel, Utensils, Navigation as NavigationIcon, Cloud, Sun,
-} from "lucide-react";
+import { MapPin, Star, Clock, ChevronRight, Home, Hotel, Utensils, Navigation as NavigationIcon, Cloud, Sun } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
-import { getAttractionById } from "../data/attractions";
+import { Skeleton } from "../components/ui/skeleton";
+import { getAttraction } from "../../lib/api";
+import type { Attraction } from "../data/attractions";
 
 export function AttractionDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const attraction = getAttractionById(id ?? "");
+  const [attraction, setAttraction] = useState<Attraction | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  if (!attraction) {
+  useEffect(() => {
+    if (!id) return;
+    getAttraction(id)
+      .then(setAttraction)
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <Skeleton className="mt-20 h-[65vh] w-full rounded-none" />
+        <div className="max-w-[1280px] mx-auto px-8 py-16 space-y-6">
+          <Skeleton className="h-8 w-1/2" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+        </div>
+      </div>
+    );
+  }
+
+  if (notFound || !attraction) {
     return (
       <div className="min-h-screen bg-[#F5EFE0] flex flex-col">
         <Navigation />
         <div className="flex-1 flex flex-col items-center justify-center gap-4 pt-32">
-          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>
-            Attraction not found
-          </h1>
+          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>Attraction not found</h1>
           <Link to="/" className="bg-[#C4622D] text-white px-6 py-3 rounded-lg hover:bg-[#B55626] transition-colors"
-            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-            Back to Home
-          </Link>
+            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>Back to Home</Link>
         </div>
         <Footer />
       </div>
@@ -85,19 +105,15 @@ export function AttractionDetailPage() {
                   </div>
                   {attraction.gallery.slice(1).map((img, i) => (
                     <div key={i} className="h-64 rounded-2xl overflow-hidden">
-                      <ImageWithFallback src={img} alt={`${attraction.name} ${i+2}`} className="w-full h-full object-cover" />
+                      <ImageWithFallback src={img} alt={`${attraction.name} ${i + 2}`} className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="bg-white rounded-2xl p-8 mb-8">
-                <h2 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "32px" }}>
-                  About {attraction.name}
-                </h2>
-                <p className="text-[#5C3A1E]/80 leading-relaxed" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
-                  {attraction.longDescription}
-                </p>
+                <h2 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "32px" }}>About {attraction.name}</h2>
+                <p className="text-[#5C3A1E]/80 leading-relaxed" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{attraction.longDescription}</p>
               </div>
 
               <div className="bg-white rounded-2xl p-8 mb-8">
@@ -118,7 +134,7 @@ export function AttractionDetailPage() {
                 <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>Nearby Hotels</h3>
                 <div className="space-y-4">
                   {attraction.nearbyHotels.map((hotel, i) => (
-                    <div key={i} className="flex items-center justify-between p-4 bg-[#F5EFE0] rounded-xl hover:bg-[#EDE7D3] transition-colors cursor-pointer">
+                    <div key={i} className="flex items-center justify-between p-4 bg-[#F5EFE0] rounded-xl">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-[#C4622D]/10 rounded-lg flex items-center justify-center">
                           <Hotel className="text-[#C4622D]" size={20} />
@@ -135,7 +151,7 @@ export function AttractionDetailPage() {
                 <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>Nearby Restaurants</h3>
                 <div className="space-y-4">
                   {attraction.nearbyRestaurants.map((r, i) => (
-                    <div key={i} className="flex items-center justify-between p-4 bg-[#F5EFE0] rounded-xl hover:bg-[#EDE7D3] transition-colors cursor-pointer">
+                    <div key={i} className="flex items-center justify-between p-4 bg-[#F5EFE0] rounded-xl">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-[#2D5016]/10 rounded-lg flex items-center justify-center">
                           <Utensils className="text-[#2D5016]" size={20} />

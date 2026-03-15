@@ -22,17 +22,41 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
-import { attractions } from "../data/attractions";
+import { getAttractions, streamRecommendation } from "../../lib/api";
+import type { Attraction } from "../data/attractions";
 
 export function HomePage() {
   const [scrollY, setScrollY] = useState(0);
   const { t } = useLang();
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const [aiInput, setAiInput] = useState("");
+  const [aiResponse, setAiResponse] = useState("");
+  const [aiStreaming, setAiStreaming] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    getAttractions().then(setAttractions).catch(console.error);
+  }, []);
+
+  const handleAiSubmit = async () => {
+    if (!aiInput.trim() || aiStreaming) return;
+    setAiResponse("");
+    setAiStreaming(true);
+    try {
+      await streamRecommendation(
+        aiInput,
+        (chunk) => setAiResponse((prev) => prev + chunk),
+        () => setAiStreaming(false)
+      );
+    } catch {
+      setAiStreaming(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -544,16 +568,30 @@ export function HomePage() {
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 flex gap-3">
                   <input
                     type="text"
+                    value={aiInput}
+                    onChange={(e) => setAiInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleAiSubmit()}
                     placeholder="Ask about destinations, culture, or travel tips..."
                     className="flex-1 bg-transparent text-white placeholder-white/50 outline-none"
                     style={{ fontFamily: "var(--font-body)", fontWeight: 400 }}
                   />
-                  <button className="bg-[#D4A827] text-[#1A1A1A] px-6 py-2.5 rounded-lg hover:bg-[#C49627] transition-colors">
-                    <span style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                      Generate
-                    </span>
+                  <button
+                    onClick={handleAiSubmit}
+                    disabled={aiStreaming}
+                    className="bg-[#D4A827] text-[#1A1A1A] px-6 py-2.5 rounded-lg hover:bg-[#C49627] transition-colors disabled:opacity-60"
+                    style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}
+                  >
+                    {aiStreaming ? "..." : "Generate"}
                   </button>
                 </div>
+
+                {aiResponse && (
+                  <div className="mt-4 bg-white/10 backdrop-blur-sm rounded-xl p-4 text-white/90 text-sm leading-relaxed"
+                    style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
+                    {aiResponse}
+                    {aiStreaming && <span className="inline-block w-1 h-4 bg-white/70 ml-1 animate-pulse" />}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -735,6 +773,7 @@ export function HomePage() {
 
 // Destination Card Component
 function DestinationCard({
+  id,
   image,
   badge,
   location,
@@ -743,6 +782,7 @@ function DestinationCard({
   time,
   featured = false,
 }: {
+  id: string;
   image: string;
   badge: string;
   location: string;

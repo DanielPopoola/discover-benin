@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import create_db_and_tables
 from app.seed import seed
-from app.routers import attractions, hotels, restaurants
+from app.routers import attractions, hotels, restaurants, ai
 
 
 @asynccontextmanager
@@ -39,6 +39,8 @@ app.add_middleware(
 app.include_router(attractions.router)
 app.include_router(hotels.router)
 app.include_router(restaurants.router)
+app.include_router(ai.router)
+
 
 @app.get("/health")
 def health():

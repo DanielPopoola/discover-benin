@@ -3,19 +3,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models import Attraction
+from app.schemas import AttractionRead
 
 router = APIRouter(prefix="/api/attractions", tags=["attractions"])
 
 
-@router.get("", response_model=list[Attraction])
+@router.get("", response_model=list[AttractionRead], response_model_by_alias=True)
 def list_attractions(
     category: Optional[str] = None,
     region: Optional[str] = None,
     session: Session = Depends(get_session),
 ):
     query = select(Attraction)
-    # Only add WHERE clause when the param is actually provided —
-    # if we checked for None here, unfiltered requests would return nothing
     if category:
         query = query.where(Attraction.category == category)
     if region:
@@ -23,7 +22,7 @@ def list_attractions(
     return session.exec(query).all()
 
 
-@router.get("/{slug}", response_model=Attraction)
+@router.get("/{slug}", response_model=AttractionRead, response_model_by_alias=True)
 def get_attraction(slug: str, session: Session = Depends(get_session)):
     attraction = session.get(Attraction, slug)
     if not attraction:
