@@ -17,7 +17,11 @@ export function HotelDetailPage() {
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id === "undefined") {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     getHotel(id)
       .then(setHotel)
       .catch(() => setNotFound(true))

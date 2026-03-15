@@ -23,7 +23,11 @@ export function RestaurantDetailPage() {
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id === "undefined") {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     getRestaurant(id)
       .then(setRestaurant)
       .catch(() => setNotFound(true))
