@@ -30,7 +30,9 @@ def list_hotels(
 
 @router.get("/{slug}", response_model=HotelRead, response_model_by_alias=True)
 def get_hotel(slug: str, session: Session = Depends(get_session)):
-    hotel = session.get(Hotel, slug)
+    hotel = session.exec(
+        select(Hotel).where(Hotel.slug == slug)
+    ).first()
     if not hotel:
         raise HTTPException(status_code=404, detail="Hotel not found")
     return hotel

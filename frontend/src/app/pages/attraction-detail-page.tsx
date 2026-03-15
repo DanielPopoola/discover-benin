@@ -15,7 +15,11 @@ export function AttractionDetailPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id === "undefined") {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     getAttraction(id)
       .then(setAttraction)
       .catch(() => setNotFound(true))
