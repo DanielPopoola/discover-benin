@@ -24,7 +24,9 @@ def list_attractions(
 
 @router.get("/{slug}", response_model=AttractionRead, response_model_by_alias=True)
 def get_attraction(slug: str, session: Session = Depends(get_session)):
-    attraction = session.get(Attraction, slug)
+    attraction = session.exec(
+        select(Attraction).where(Attraction.slug == slug)
+    ).first()
     if not attraction:
         raise HTTPException(status_code=404, detail="Attraction not found")
     return attraction

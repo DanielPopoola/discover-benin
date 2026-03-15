@@ -8,8 +8,41 @@ import { Skeleton } from "../components/ui/skeleton";
 import { motion } from "motion/react";
 import { getHotel } from "../../lib/api";
 import type { Hotel } from "../data/hotels";
+import { useLang } from "../context/LanguageContext";
 
 export function HotelDetailPage() {
+  const { lang } = useLang();
+  const tr = lang === "FR"
+    ? {
+        notFound: "Hôtel introuvable",
+        back: "Retour aux hôtels",
+        reviews: "avis",
+        policies: "Règles de l'hôtel",
+        checkIn: "Arrivée",
+        checkOut: "Départ",
+        cancellation: "Annulation",
+        book: "Réserver par email",
+        visit: "Visiter le site",
+        contact: "Contact",
+        location: "Localisation",
+        maps: "Ouvrir dans Google Maps",
+        perNight: "/nuit",
+      }
+    : {
+        notFound: "Hotel not found",
+        back: "Back to Hotels",
+        reviews: "reviews",
+        policies: "Hotel Policies",
+        checkIn: "Check-in",
+        checkOut: "Check-out",
+        cancellation: "Cancellation",
+        book: "Book via Email",
+        visit: "Visit Website",
+        contact: "Contact",
+        location: "Location",
+        maps: "Open in Google Maps",
+        perNight: "/ night",
+      };
   const { id } = useParams<{ id: string }>();
   const [hotel, setHotel] = useState<Hotel | null>(null);
   const [loading, setLoading] = useState(true);
@@ -17,7 +50,11 @@ export function HotelDetailPage() {
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id === "undefined") {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     getHotel(id)
       .then(setHotel)
       .catch(() => setNotFound(true))
@@ -43,9 +80,9 @@ export function HotelDetailPage() {
       <div className="min-h-screen bg-[#F5EFE0] flex flex-col">
         <Navigation />
         <div className="flex-1 flex flex-col items-center justify-center gap-4 pt-32">
-          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>Hotel not found</h1>
+          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>{tr.notFound}</h1>
           <Link to="/hotels" className="bg-[#C4622D] text-white px-6 py-3 rounded-lg hover:bg-[#B55626] transition-colors"
-            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>Back to Hotels</Link>
+            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>{tr.back}</Link>
         </div>
         <Footer />
       </div>
@@ -108,7 +145,7 @@ export function HotelDetailPage() {
               <div className="flex items-center gap-1.5">
                 <Star className="text-[#D4A827] fill-[#D4A827]" size={15} />
                 <span className="text-white font-medium">{hotel.rating}</span>
-                <span className="text-white/60">({hotel.reviews} reviews)</span>
+                <span className="text-white/60">({hotel.reviews} {tr.reviews})</span>
               </div>
             </div>
           </div>
@@ -169,12 +206,12 @@ export function HotelDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-8">
-                <h3 className="text-[#1A1A1A] mb-5" style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem" }}>Hotel Policies</h3>
+                <h3 className="text-[#1A1A1A] mb-5" style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem" }}>{tr.policies}</h3>
                 <div className="space-y-0 divide-y divide-[rgba(92,58,30,0.08)]">
                   {[
-                    ["Check-in", hotel.policies.checkIn],
-                    ["Check-out", hotel.policies.checkOut],
-                    ["Cancellation", hotel.policies.cancellation],
+                    [tr.checkIn, hotel.policies.checkIn],
+                    [tr.checkOut, hotel.policies.checkOut],
+                    [tr.cancellation, hotel.policies.cancellation],
                   ].map(([label, value]) => (
                     <div key={label} className="flex items-start justify-between py-4 gap-4">
                       <div className="flex items-center gap-2.5 text-[#5C3A1E]/60 text-sm shrink-0" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
@@ -191,29 +228,29 @@ export function HotelDetailPage() {
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)] shadow-[0_8px_30px_rgba(0,0,0,0.07)]">
                 <div className="flex items-baseline gap-1 mb-1">
                   <span style={{ fontFamily: "var(--font-display)", fontSize: "2rem", color: "#C4622D" }}>€{hotel.price}</span>
-                  <span className="text-[#5C3A1E]/60 text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>/ night</span>
+                  <span className="text-[#5C3A1E]/60 text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{tr.perNight}</span>
                 </div>
                 <div className="flex items-center gap-1.5 mb-6">
                   <Star className="text-[#D4A827] fill-[#D4A827]" size={14} />
                   <span className="text-sm font-medium text-[#1A1A1A]">{hotel.rating}</span>
-                  <span className="text-[#5C3A1E]/50 text-xs">({hotel.reviews} reviews)</span>
+                  <span className="text-[#5C3A1E]/50 text-xs">({hotel.reviews} {tr.reviews})</span>
                 </div>
                 <motion.a href={`mailto:${hotel.contact.email}`} whileHover={{ y: -2 }}
                   className="w-full bg-[#C4622D] text-white py-3.5 rounded-xl flex items-center justify-center gap-2 mb-3 hover:bg-[#B55626] transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 600, textDecoration: "none" }}>
-                  Book via Email
+                  {tr.book}
                 </motion.a>
                 {hotel.contact.website && (
                   <a href={`https://${hotel.contact.website}`} target="_blank" rel="noopener noreferrer"
                     className="w-full border-2 border-[#C4622D] text-[#C4622D] py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#C4622D] hover:text-white transition-colors"
                     style={{ fontFamily: "var(--font-body)", fontWeight: 600, textDecoration: "none" }}>
-                    <Globe size={16} />Visit Website
+                    <Globe size={16} />{tr.visit}
                   </a>
                 )}
               </div>
 
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>Contact</h4>
+                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>{tr.contact}</h4>
                 <div className="space-y-3">
                   {hotel.contact.phone && (
                     <a href={`tel:${hotel.contact.phone}`} className="flex items-center gap-3 text-sm text-[#5C3A1E] hover:text-[#C4622D] transition-colors group"
@@ -247,7 +284,7 @@ export function HotelDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>Location</h4>
+                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>{tr.location}</h4>
                 <div className="h-44 bg-[#F5EFE0] rounded-xl mb-4 flex flex-col items-center justify-center gap-2">
                   <MapPin className="text-[#C4622D]" size={36} />
                   <p className="text-[#5C3A1E]/70 text-xs text-center px-4 leading-relaxed" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{hotel.address}</p>
@@ -256,7 +293,7 @@ export function HotelDetailPage() {
                   target="_blank" rel="noopener noreferrer"
                   className="w-full bg-[#2D5016] text-white py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1e3a0e] transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 500, textDecoration: "none" }}>
-                  <MapPin size={16} />Open in Google Maps
+                  <MapPin size={16} />{tr.maps}
                 </a>
               </div>
             </div>

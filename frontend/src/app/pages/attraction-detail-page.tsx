@@ -7,15 +7,24 @@ import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { Skeleton } from "../components/ui/skeleton";
 import { getAttraction } from "../../lib/api";
 import type { Attraction } from "../data/attractions";
+import { useLang } from "../context/LanguageContext";
 
 export function AttractionDetailPage() {
+  const { lang } = useLang();
+  const tr = lang === "FR"
+    ? { notFound: "Attraction introuvable", back: "Retour à l'accueil", reviews: "avis", tips: "Conseils de voyage", nearbyHotels: "Hôtels à proximité", nearbyRestaurants: "Restaurants à proximité", facts: "Infos rapides", category: "Catégorie", region: "Région", bestTime: "Meilleure période", travelTime: "Temps de trajet", rating: "Note", location: "Localisation", maps: "Ouvrir dans Google Maps", weather: "Météo" }
+    : { notFound: "Attraction not found", back: "Back to Home", reviews: "reviews", tips: "Travel Tips", nearbyHotels: "Nearby Hotels", nearbyRestaurants: "Nearby Restaurants", facts: "Quick Facts", category: "Category", region: "Region", bestTime: "Best Time", travelTime: "Travel Time", rating: "Rating", location: "Location", maps: "Open in Google Maps", weather: "Weather" };
   const { id } = useParams<{ id: string }>();
   const [attraction, setAttraction] = useState<Attraction | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id === "undefined") {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     getAttraction(id)
       .then(setAttraction)
       .catch(() => setNotFound(true))
@@ -41,9 +50,9 @@ export function AttractionDetailPage() {
       <div className="min-h-screen bg-[#F5EFE0] flex flex-col">
         <Navigation />
         <div className="flex-1 flex flex-col items-center justify-center gap-4 pt-32">
-          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>Attraction not found</h1>
+          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>{tr.notFound}</h1>
           <Link to="/" className="bg-[#C4622D] text-white px-6 py-3 rounded-lg hover:bg-[#B55626] transition-colors"
-            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>Back to Home</Link>
+            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>{tr.back}</Link>
         </div>
         <Footer />
       </div>
@@ -82,7 +91,7 @@ export function AttractionDetailPage() {
               <div className="flex items-center gap-2">
                 <Star className="text-[#D4A827] fill-[#D4A827]" size={18} />
                 <span style={{ fontWeight: 500 }}>{attraction.rating}</span>
-                <span className="text-white/70">({attraction.reviews} reviews)</span>
+                <span className="text-white/70">({attraction.reviews} {tr.reviews})</span>
               </div>
               <div className="flex items-center gap-2"><Clock size={18} /><span>{attraction.travelTime}</span></div>
               <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full"
@@ -117,7 +126,7 @@ export function AttractionDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-8 mb-8">
-                <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>Travel Tips</h3>
+                <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>{tr.tips}</h3>
                 <ul className="space-y-4">
                   {attraction.tips.map((tip, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -131,7 +140,7 @@ export function AttractionDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-8 mb-8">
-                <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>Nearby Hotels</h3>
+                <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>{tr.nearbyHotels}</h3>
                 <div className="space-y-4">
                   {attraction.nearbyHotels.map((hotel, i) => (
                     <div key={i} className="flex items-center justify-between p-4 bg-[#F5EFE0] rounded-xl">
@@ -148,7 +157,7 @@ export function AttractionDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-8">
-                <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>Nearby Restaurants</h3>
+                <h3 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "28px" }}>{tr.nearbyRestaurants}</h3>
                 <div className="space-y-4">
                   {attraction.nearbyRestaurants.map((r, i) => (
                     <div key={i} className="flex items-center justify-between p-4 bg-[#F5EFE0] rounded-xl">
@@ -167,14 +176,14 @@ export function AttractionDetailPage() {
 
             <div className="lg:sticky lg:top-24 h-fit space-y-6">
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>Quick Facts</h4>
+                <h4 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>{tr.facts}</h4>
                 <div className="space-y-4">
                   {[
-                    ["Category", attraction.category],
-                    ["Region", attraction.region],
-                    ["Best Time", attraction.bestTime],
-                    ["Travel Time", attraction.travelTime],
-                    ["Rating", `${attraction.rating}/5.0 (${attraction.reviews} reviews)`],
+                    [tr.category, attraction.category],
+                    [tr.region, attraction.region],
+                    [tr.bestTime, attraction.bestTime],
+                    [tr.travelTime, attraction.travelTime],
+                    ["Rating", `${attraction.rating}/5.0 (${attraction.reviews} {tr.reviews})`],
                   ].map(([label, value]) => (
                     <div key={label} className="flex justify-between gap-4">
                       <span className="text-[#5C3A1E]/70 shrink-0" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{label}</span>
@@ -185,7 +194,7 @@ export function AttractionDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>Location</h4>
+                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>{tr.location}</h4>
                 <div className="h-48 bg-[#F5EFE0] rounded-xl mb-4 flex flex-col items-center justify-center gap-2">
                   <MapPin className="text-[#C4622D]" size={40} />
                   <p className="text-[#5C3A1E]/70 text-sm text-center px-4" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
@@ -196,12 +205,12 @@ export function AttractionDetailPage() {
                   target="_blank" rel="noopener noreferrer"
                   className="w-full bg-[#C4622D] text-white py-3 rounded-lg hover:bg-[#B55626] transition-colors flex items-center justify-center gap-2">
                   <NavigationIcon size={18} />
-                  <span style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>Open in Google Maps</span>
+                  <span style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>{tr.maps}</span>
                 </a>
               </div>
 
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>Weather</h4>
+                <h4 className="text-[#1A1A1A] mb-6" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>{tr.weather}</h4>
                 <div className="space-y-4">
                   {attraction.weather.map((w, i) => (
                     <div key={i} className={`flex items-center justify-between p-4 rounded-xl ${i === 0 ? "bg-[#D4A827]/10" : "bg-[#2D5016]/10"}`}>

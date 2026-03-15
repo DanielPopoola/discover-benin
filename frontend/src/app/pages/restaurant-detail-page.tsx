@@ -8,6 +8,7 @@ import { Skeleton } from "../components/ui/skeleton";
 import { motion } from "motion/react";
 import { getRestaurant } from "../../lib/api";
 import type { Restaurant } from "../data/restaurants";
+import { useLang } from "../context/LanguageContext";
 
 const PRICE_LABELS: Record<string, string> = {
   "$":   "Budget · Under €10/person",
@@ -16,6 +17,10 @@ const PRICE_LABELS: Record<string, string> = {
 };
 
 export function RestaurantDetailPage() {
+  const { lang } = useLang();
+  const tr = lang === "FR"
+    ? { notFound: "Restaurant introuvable", back: "Retour aux restaurants", reviews: "avis", location: "Localisation", priceRange: "Gamme de prix", basedOn: "Basé sur", contact: "Contact et réservations", maps: "Ouvrir dans Google Maps" }
+    : { notFound: "Restaurant not found", back: "Back to Restaurants", reviews: "reviews", location: "Location", priceRange: "Price range", basedOn: "Based on", contact: "Contact & reservations", maps: "Open in Google Maps" };
   const { id } = useParams<{ id: string }>();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +28,11 @@ export function RestaurantDetailPage() {
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id === "undefined") {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     getRestaurant(id)
       .then(setRestaurant)
       .catch(() => setNotFound(true))
@@ -49,9 +58,9 @@ export function RestaurantDetailPage() {
       <div className="min-h-screen bg-[#F5EFE0] flex flex-col">
         <Navigation />
         <div className="flex-1 flex flex-col items-center justify-center gap-4 pt-32">
-          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>Restaurant not found</h1>
+          <h1 className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }}>{tr.notFound}</h1>
           <Link to="/restaurants" className="bg-[#C4622D] text-white px-6 py-3 rounded-lg hover:bg-[#B55626] transition-colors"
-            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>Back to Restaurants</Link>
+            style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>{tr.back}</Link>
         </div>
         <Footer />
       </div>
@@ -114,7 +123,7 @@ export function RestaurantDetailPage() {
               <div className="flex items-center gap-1.5">
                 <Star className="text-[#D4A827] fill-[#D4A827]" size={14} />
                 <span className="text-white font-medium">{restaurant.rating}</span>
-                <span className="text-white/60">({restaurant.reviews} reviews)</span>
+                <span className="text-white/60">({restaurant.reviews} {tr.reviews})</span>
               </div>
             </div>
           </div>
@@ -188,9 +197,9 @@ export function RestaurantDetailPage() {
                 <div className="space-y-0 divide-y divide-[rgba(92,58,30,0.08)]">
                   {[
                     { label: "Cuisine", value: restaurant.cuisine },
-                    { label: "Location", value: restaurant.city },
+                    { label: tr.location, value: restaurant.city },
                     { label: "Hours", value: restaurant.hours },
-                    { label: "Price range", value: PRICE_LABELS[restaurant.price] ?? restaurant.price },
+                    { label: tr.priceRange, value: PRICE_LABELS[restaurant.price] ?? restaurant.price },
                     { label: "Must try", value: restaurant.specialty },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex justify-between items-start gap-4 py-3.5">
@@ -208,11 +217,11 @@ export function RestaurantDetailPage() {
                   </div>
                   <span className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem" }}>{restaurant.rating}</span>
                 </div>
-                <p className="text-[#5C3A1E]/50 text-xs mt-1" style={{ fontFamily: "var(--font-body)" }}>Based on {restaurant.reviews} reviews</p>
+                <p className="text-[#5C3A1E]/50 text-xs mt-1" style={{ fontFamily: "var(--font-body)" }}>{tr.basedOn} {restaurant.reviews} {tr.reviews}</p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>Contact & reservations</h4>
+                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>{tr.contact}</h4>
                 <div className="space-y-3">
                   <a href={`tel:${restaurant.contact.phone}`}
                     className="flex items-center gap-3 text-sm text-[#5C3A1E] hover:text-[#C4622D] transition-colors group"
@@ -234,7 +243,7 @@ export function RestaurantDetailPage() {
               </div>
 
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)]">
-                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>Location</h4>
+                <h4 className="text-[#1A1A1A] mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem" }}>{tr.location}</h4>
                 <div className="h-40 bg-[#F5EFE0] rounded-xl mb-4 flex flex-col items-center justify-center gap-2">
                   <MapPin className="text-[#C4622D]" size={32} />
                   <p className="text-[#5C3A1E]/70 text-xs text-center px-4 leading-relaxed" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
@@ -245,7 +254,7 @@ export function RestaurantDetailPage() {
                   target="_blank" rel="noopener noreferrer"
                   className="w-full bg-[#2D5016] text-white py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1e3a0e] transition-colors"
                   style={{ fontFamily: "var(--font-body)", fontWeight: 500, textDecoration: "none" }}>
-                  <MapPin size={15} />Open in Google Maps
+                  <MapPin size={15} />{tr.maps}
                 </a>
               </div>
             </div>

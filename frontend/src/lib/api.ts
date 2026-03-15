@@ -17,8 +17,12 @@ const BASE = "/api";
 // (and all page components) use `id`. This function maps slug → id once,
 // at the boundary, so nothing else in the app needs to know about it.
 // ---------------------------------------------------------------------------
-function normalise<T extends { slug: string }>(raw: T): T & { id: string } {
-  return { ...raw, id: raw.slug };
+function normalise<T extends { slug?: string; id?: string }>(raw: T): T & { id: string } {
+  const id = raw.slug ?? raw.id;
+  if (!id) {
+    throw new Error("API item is missing both slug and id");
+  }
+  return { ...raw, id };
 }
 
 // ---------------------------------------------------------------------------

@@ -8,8 +8,53 @@ import { motion, AnimatePresence } from "motion/react";
 import { Skeleton } from "../components/ui/skeleton";
 import { getAttractions } from "../../lib/api";
 import type { Attraction } from "../data/attractions";
+import { useLang } from "../context/LanguageContext";
 
 export function AttractionsListingPage() {
+  const { lang } = useLang();
+  const tr = lang === "FR"
+    ? {
+        all: "Tous",
+        explore: "Explorer",
+        title: "Attractions touristiques",
+        subtitle: "Des palais royaux classés à l'UNESCO aux villages lacustres : découvrez toutes les merveilles du Bénin.",
+        destinations: "Destinations",
+        regions: "Régions",
+        categories: "Catégories",
+        type: "Type",
+        region: "Région",
+        sort: "Trier :",
+        rating: "note",
+        name: "nom",
+        found: "trouvées",
+        noMatch: "Aucune attraction ne correspond à vos filtres",
+        clear: "Réinitialiser",
+        bestTime: "Meilleure période",
+        unsure: "Vous ne savez pas par où commencer ?",
+        ai: "Laissez notre assistant IA créer un itinéraire personnalisé en quelques secondes.",
+        plan: "Planifier mon voyage →",
+      }
+    : {
+        all: "All",
+        explore: "Explore",
+        title: "Tourist Attractions",
+        subtitle: "From UNESCO-listed royal palaces to stilt villages on the water — discover everything Benin has to offer.",
+        destinations: "Destinations",
+        regions: "Regions",
+        categories: "Categories",
+        type: "Type",
+        region: "Region",
+        sort: "Sort:",
+        rating: "rating",
+        name: "name",
+        found: "found",
+        noMatch: "No attractions match your filters",
+        clear: "Clear filters",
+        bestTime: "Best time to visit",
+        unsure: "Not sure where to start?",
+        ai: "Let our AI assistant build you a personalised itinerary in seconds.",
+        plan: "Plan my trip →",
+      };
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -54,19 +99,19 @@ export function AttractionsListingPage() {
         <div className="max-w-[1280px] mx-auto px-8 relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-0.5 bg-[#D4A827]" />
-            <span className="text-[#D4A827] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", fontSize: "11px" }}>Explore</span>
+            <span className="text-[#D4A827] uppercase tracking-wider" style={{ fontFamily: "var(--font-mono)", fontSize: "11px" }}>{tr.explore}</span>
           </div>
           <h1 className="text-white mb-4" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: "1.1" }}>
-            Tourist <em style={{ color: "#D4A827" }}>Attractions</em>
+            {tr.title}
           </h1>
           <p className="text-white/70 max-w-xl leading-relaxed" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>
-            From UNESCO-listed royal palaces to stilt villages on the water — discover everything Benin has to offer.
+            {tr.subtitle}
           </p>
           <div className="flex gap-10 mt-8">
             {[
-              [String(attractions.length), "Destinations"],
-              [String(new Set(attractions.map((a) => a.region)).size), "Regions"],
-              [String(new Set(attractions.map((a) => a.category)).size), "Categories"],
+              [String(attractions.length), tr.destinations],
+              [String(new Set(attractions.map((a) => a.region)).size), tr.regions],
+              [String(new Set(attractions.map((a) => a.category)).size), tr.categories],
             ].map(([num, label]) => (
               <div key={label}>
                 <div className="text-white" style={{ fontFamily: "var(--font-display)", fontSize: "2rem", lineHeight: 1 }}>{num}</div>
@@ -81,27 +126,27 @@ export function AttractionsListingPage() {
         <div className="max-w-[1280px] mx-auto px-8 py-4">
           <div className="flex flex-wrap items-center gap-6">
             <div className="flex flex-wrap gap-2 items-center">
-              <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider mr-1" style={{ fontFamily: "var(--font-mono)" }}>Type</span>
+              <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider mr-1" style={{ fontFamily: "var(--font-mono)" }}>{tr.type}</span>
               {ALL_CATEGORIES.map((cat) => (
-                <button key={cat} onClick={() => setSelectedCategory(cat)}
+                <button key={cat === "All" ? tr.all : cat} onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-1.5 rounded-full text-sm transition-all ${selectedCategory === cat ? "bg-[#C4622D] text-white" : "bg-[#F5EFE0] text-[#5C3A1E] hover:bg-[#C4622D]/10"}`}
                   style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                  {cat}
+                  {cat === "All" ? tr.all : cat}
                 </button>
               ))}
             </div>
             <div className="flex flex-wrap gap-2 items-center">
-              <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider mr-1" style={{ fontFamily: "var(--font-mono)" }}>Region</span>
+              <span className="text-[#5C3A1E]/60 text-xs uppercase tracking-wider mr-1" style={{ fontFamily: "var(--font-mono)" }}>{tr.region}</span>
               {ALL_REGIONS.map((region) => (
-                <button key={region} onClick={() => setSelectedRegion(region)}
+                <button key={region === "All" ? tr.all : region} onClick={() => setSelectedRegion(region)}
                   className={`px-4 py-1.5 rounded-full text-sm transition-all ${selectedRegion === region ? "bg-[#2D5016] text-white" : "bg-[#F5EFE0] text-[#5C3A1E] hover:bg-[#2D5016]/10"}`}
                   style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-                  {region}
+                  {region === "All" ? tr.all : region}
                 </button>
               ))}
             </div>
             <div className="ml-auto flex items-center gap-2">
-              <span className="text-[#5C3A1E]/60 text-xs" style={{ fontFamily: "var(--font-body)" }}>Sort:</span>
+              <span className="text-[#5C3A1E]/60 text-xs" style={{ fontFamily: "var(--font-body)" }}>{tr.sort}</span>
               {(["rating", "name"] as const).map((s) => (
                 <button key={s} onClick={() => setSortBy(s)}
                   className={`px-3 py-1.5 rounded-full text-sm capitalize transition-all ${sortBy === s ? "bg-[#1A1A1A] text-white" : "text-[#5C3A1E] hover:bg-[#F5EFE0]"}`}
@@ -132,13 +177,13 @@ export function AttractionsListingPage() {
           ) : (
             <>
               <p className="text-[#5C3A1E]/60 mb-8 text-sm" style={{ fontFamily: "var(--font-body)" }}>
-                {filtered.length} attraction{filtered.length !== 1 ? "s" : ""} found
+                {filtered.length} {lang === "FR" ? "attraction" : "attraction"}{filtered.length !== 1 ? "s" : ""} {tr.found}
               </p>
 
               {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 gap-4">
                   <div className="text-6xl">🗺️</div>
-                  <p className="text-[#5C3A1E]/70 text-lg" style={{ fontFamily: "var(--font-display)" }}>No attractions match your filters</p>
+                  <p className="text-[#5C3A1E]/70 text-lg" style={{ fontFamily: "var(--font-display)" }}>{tr.noMatch}</p>
                   <button onClick={() => { setSelectedCategory("All"); setSelectedRegion("All"); }}
                     className="text-[#C4622D] underline text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
                     Clear all filters
@@ -188,7 +233,7 @@ export function AttractionsListingPage() {
                                 </div>
                               </div>
                               <div className="mt-3 pt-3 border-t border-[rgba(92,58,30,0.08)] flex items-center justify-between">
-                                <span className="text-[#5C3A1E]/50 text-xs" style={{ fontFamily: "var(--font-body)" }}>Best time to visit</span>
+                                <span className="text-[#5C3A1E]/50 text-xs" style={{ fontFamily: "var(--font-body)" }}>{tr.bestTime}</span>
                                 <span className="text-[#2D5016] bg-[#E8F0DC] px-3 py-0.5 rounded-full text-xs" style={{ fontFamily: "var(--font-mono)", fontWeight: 500 }}>
                                   {attraction.bestTime}
                                 </span>
@@ -210,12 +255,12 @@ export function AttractionsListingPage() {
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="bg-[#F5EFE0] rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-[#1A1A1A] mb-2" style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem" }}>Not sure where to start?</h3>
-              <p className="text-[#5C3A1E]/70" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>Let our AI assistant build you a personalised itinerary in seconds.</p>
+              <h3 className="text-[#1A1A1A] mb-2" style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem" }}>{tr.unsure}</h3>
+              <p className="text-[#5C3A1E]/70" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{tr.ai}</p>
             </div>
             <Link to="/#ai-assistant" className="bg-[#C4622D] text-white px-8 py-3.5 rounded-xl hover:bg-[#B55626] transition-colors whitespace-nowrap"
               style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
-              Plan my trip →
+              {tr.plan}
             </Link>
           </div>
         </div>
