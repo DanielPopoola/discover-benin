@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "alembic>=1.18.4",
+    "fastapi[standard]>=0.135.1",
+    "sqlalchemy>=2.0.48",
+    "sqlmodel>=0.0.37",
+]
