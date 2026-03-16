@@ -13,7 +13,7 @@ import {
 // 3. Copy the endpoint — looks like https://formspree.io/f/xyzabc12
 // 4. Replace the placeholder below with your actual endpoint
 // ─────────────────────────────────────────────────────────────────────────────
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/meerrqrp";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
