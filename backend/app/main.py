@@ -1,10 +1,25 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 from app.database import create_db_and_tables
 from app.seed import seed
 from app.routers import attractions, hotels, restaurants, ai
+
+
+load_dotenv()
+
+
+raw_origins = os.getenv("CORS_ORIGINS", "")
+origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+
+
+if not origins:
+    origins = [
+        "http://localhost:5173",
+        "http://localhost:4173",
+    ]
 
 
 @asynccontextmanager
@@ -27,10 +42,7 @@ app = FastAPI(
 # In production, replace or extend this list with your actual domain
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",   # Vite dev server
-        "http://localhost:4173",   # Vite preview
-    ],
+    allow_origins=origins,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
