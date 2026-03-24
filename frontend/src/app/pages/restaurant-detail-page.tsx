@@ -11,9 +11,9 @@ import type { Restaurant } from "../data/restaurants";
 import { useLang } from "../context/LanguageContext";
 
 const PRICE_LABELS: Record<string, string> = {
-  "$":   "Budget · Under €10/person",
-  "$$":  "Mid-range · €10–25/person",
-  "$$$": "Fine dining · €25+/person",
+  "$":   "Budget · Under CFA 1000/person",
+  "$$":  "Mid-range · CFA 1000 – 2500/person",
+  "$$$": "Fine dining · CFA 2500+/person",
 };
 
 export function RestaurantDetailPage() {

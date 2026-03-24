@@ -227,7 +227,7 @@ export function HotelDetailPage() {
             <div className="lg:sticky lg:top-24 h-fit space-y-6">
               <div className="bg-white rounded-2xl p-6 border border-[rgba(92,58,30,0.15)] shadow-[0_8px_30px_rgba(0,0,0,0.07)]">
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span style={{ fontFamily: "var(--font-display)", fontSize: "2rem", color: "#C4622D" }}>€{hotel.price}</span>
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: "2rem", color: "#C4622D" }}>CFA {hotel.price}</span>
                   <span className="text-[#5C3A1E]/60 text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{tr.perNight}</span>
                 </div>
                 <div className="flex items-center gap-1.5 mb-6">

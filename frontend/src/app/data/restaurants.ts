@@ -52,24 +52,24 @@ export const restaurants: Restaurant[] = [
       {
         section: "Starters",
         items: [
-          { name: "Crab salad with palm heart", description: "Fresh Atlantic crab, local palm heart, citrus dressing", price: "€8" },
-          { name: "Akassa fritters", description: "Fermented corn fritters, spiced tomato dip", price: "€5" },
-          { name: "Smoked barracuda rillettes", description: "House-smoked fish, toasted brioche, pickled shallots", price: "€9" },
+          { name: "Crab salad with palm heart", description: "Fresh Atlantic crab, local palm heart, citrus dressing", price: "CFA 8" },
+          { name: "Akassa fritters", description: "Fermented corn fritters, spiced tomato dip", price: "CFA 5" },
+          { name: "Smoked barracuda rillettes", description: "House-smoked fish, toasted brioche, pickled shallots", price: "CFA 9" },
         ],
       },
       {
         section: "Mains",
         items: [
-          { name: "Grilled barracuda, amiwo sauce", description: "Whole barracuda, tomato-corn porridge, plantain crisps", price: "€18" },
-          { name: "Poulet DG", description: "Roast chicken, fried plantain, vegetables, house jus", price: "€15" },
-          { name: "Vegetarian amiwo", description: "Red sauce corn porridge, seasonal vegetables, boiled egg", price: "€11" },
+          { name: "Grilled barracuda, amiwo sauce", description: "Whole barracuda, tomato-corn porridge, plantain crisps", price: "CFA 18" },
+          { name: "Poulet DG", description: "Roast chicken, fried plantain, vegetables, house jus", price: "CFA 15" },
+          { name: "Vegetarian amiwo", description: "Red sauce corn porridge, seasonal vegetables, boiled egg", price: "CFA 11" },
         ],
       },
       {
         section: "Desserts",
         items: [
-          { name: "Coconut panna cotta", description: "Fresh coconut, mango coulis, lime zest", price: "€6" },
-          { name: "Chocolate fondant", description: "Dark Beninese chocolate, vanilla cream", price: "€7" },
+          { name: "Coconut panna cotta", description: "Fresh coconut, mango coulis, lime zest", price: "CFA 6" },
+          { name: "Chocolate fondant", description: "Dark Beninese chocolate, vanilla cream", price: "CFA 7" },
         ],
       },
     ],
@@ -99,25 +99,25 @@ export const restaurants: Restaurant[] = [
       {
         section: "From the Sea",
         items: [
-          { name: "Whole grilled tilapia", description: "Wood-fired, lime butter, attieke", price: "€12" },
-          { name: "Lobster thermidor", description: "Half lobster, cream sauce, gruyère gratin", price: "€24" },
-          { name: "Shrimp brochettes", description: "Atlantic prawns, garlic oil, garden salad", price: "€14" },
+          { name: "Whole grilled tilapia", description: "Wood-fired, lime butter, attieke", price: "CFA 12" },
+          { name: "Lobster thermidor", description: "Half lobster, cream sauce, gruyère gratin", price: "CFA 24" },
+          { name: "Shrimp brochettes", description: "Atlantic prawns, garlic oil, garden salad", price: "CFA 14" },
         ],
       },
       {
         section: "Sides & Extras",
         items: [
-          { name: "Attieke", description: "Fermented cassava couscous", price: "€3" },
-          { name: "Aloko", description: "Fried sweet plantain, chilli sauce", price: "€3" },
-          { name: "House salad", description: "Mixed leaves, tomato, cucumber, vinaigrette", price: "€4" },
+          { name: "Attieke", description: "Fermented cassava couscous", price: "CFA 3" },
+          { name: "Aloko", description: "Fried sweet plantain, chilli sauce", price: "CFA 3" },
+          { name: "House salad", description: "Mixed leaves, tomato, cucumber, vinaigrette", price: "CFA 4" },
         ],
       },
       {
         section: "Drinks",
         items: [
-          { name: "Fresh coconut water", description: "Straight from the shell", price: "€2" },
-          { name: "Flag beer", description: "Local Beninese lager, ice cold", price: "€2" },
-          { name: "Bissap juice", description: "Hibiscus flower, ginger, fresh mint", price: "€3" },
+          { name: "Fresh coconut water", description: "Straight from the shell", price: "CFA 2" },
+          { name: "Flag beer", description: "Local Beninese lager, ice cold", price: "CFA 2" },
+          { name: "Bissap juice", description: "Hibiscus flower, ginger, fresh mint", price: "CFA 3" },
         ],
       },
     ],
@@ -147,17 +147,17 @@ export const restaurants: Restaurant[] = [
       {
         section: "Traditional Dishes",
         items: [
-          { name: "Amiwo with fish", description: "Corn-tomato porridge, whole fried fish, piment", price: "€7" },
-          { name: "Akassa with sauce graine", description: "Fermented corn dough, palm nut sauce, smoked fish", price: "€6" },
-          { name: "Ablo with chicken", description: "Steamed rice cake, grilled chicken, onion sauce", price: "€8" },
+          { name: "Amiwo with fish", description: "Corn-tomato porridge, whole fried fish, piment", price: "CFA 7" },
+          { name: "Akassa with sauce graine", description: "Fermented corn dough, palm nut sauce, smoked fish", price: "CFA 6" },
+          { name: "Ablo with chicken", description: "Steamed rice cake, grilled chicken, onion sauce", price: "CFA 8" },
         ],
       },
       {
         section: "Breakfast & Snacks",
         items: [
-          { name: "Haricots au gingembre", description: "Spiced bean stew, ginger, bread", price: "€3" },
-          { name: "Beignets", description: "Fried dough, bean paste or banana", price: "€2" },
-          { name: "Bouillie de mil", description: "Millet porridge, condensed milk, vanilla", price: "€2" },
+          { name: "Haricots au gingembre", description: "Spiced bean stew, ginger, bread", price: "CFA 3" },
+          { name: "Beignets", description: "Fried dough, bean paste or banana", price: "CFA 2" },
+          { name: "Bouillie de mil", description: "Millet porridge, condensed milk, vanilla", price: "CFA 2" },
         ],
       },
     ],
@@ -187,17 +187,17 @@ export const restaurants: Restaurant[] = [
       {
         section: "Lake Specialities",
         items: [
-          { name: "Grilled lake tilapia", description: "Whole fish, palm oil sauce, steamed rice", price: "€6" },
-          { name: "Fresh water snails", description: "Spiced with piment doux, served with bread", price: "€5" },
-          { name: "Catfish stew", description: "Slow-cooked in tomato sauce, plantain", price: "€7" },
+          { name: "Grilled lake tilapia", description: "Whole fish, palm oil sauce, steamed rice", price: "CFA 6" },
+          { name: "Fresh water snails", description: "Spiced with piment doux, served with bread", price: "CFA 5" },
+          { name: "Catfish stew", description: "Slow-cooked in tomato sauce, plantain", price: "CFA 7" },
         ],
       },
       {
         section: "Sides",
         items: [
-          { name: "Aloko", description: "Sweet fried plantain", price: "€2" },
-          { name: "Steamed rice", description: "Plain or with sauce", price: "€2" },
-          { name: "Bissap juice", description: "House hibiscus drink", price: "€2" },
+          { name: "Aloko", description: "Sweet fried plantain", price: "CFA 2" },
+          { name: "Steamed rice", description: "Plain or with sauce", price: "CFA 2" },
+          { name: "Bissap juice", description: "House hibiscus drink", price: "CFA 2" },
         ],
       },
     ],
@@ -227,16 +227,16 @@ export const restaurants: Restaurant[] = [
       {
         section: "Pan-African Mains",
         items: [
-          { name: "Jollof rice", description: "West African tomato rice, grilled chicken, fried plantain", price: "€13" },
-          { name: "Thiéboudienne", description: "Senegalese rice and fish, stuffed with herbs", price: "€14" },
-          { name: "Moambe chicken", description: "Congolese palm nut sauce, fufu", price: "€13" },
+          { name: "Jollof rice", description: "West African tomato rice, grilled chicken, fried plantain", price: "CFA 13" },
+          { name: "Thiéboudienne", description: "Senegalese rice and fish, stuffed with herbs", price: "CFA 14" },
+          { name: "Moambe chicken", description: "Congolese palm nut sauce, fufu", price: "CFA 13" },
         ],
       },
       {
         section: "Grills",
         items: [
-          { name: "Suya skewers", description: "Spiced beef, groundnut crust, sliced onion", price: "€10" },
-          { name: "Mixed grill platter", description: "Chicken, beef, sausage, served with attieke", price: "€16" },
+          { name: "Suya skewers", description: "Spiced beef, groundnut crust, sliced onion", price: "CFA 10" },
+          { name: "Mixed grill platter", description: "Chicken, beef, sausage, served with attieke", price: "CFA 16" },
         ],
       },
     ],
@@ -266,25 +266,25 @@ export const restaurants: Restaurant[] = [
       {
         section: "Grills",
         items: [
-          { name: "Beef brochettes", description: "Charcoal-grilled beef skewers, onion, spiced sauce", price: "€4" },
-          { name: "Poulet braisé", description: "Half grilled chicken, piment, aloko", price: "€7" },
-          { name: "Mixed brochette platter", description: "Beef, chicken, sausage, six skewers total", price: "€9" },
+          { name: "Beef brochettes", description: "Charcoal-grilled beef skewers, onion, spiced sauce", price: "CFA 4" },
+          { name: "Poulet braisé", description: "Half grilled chicken, piment, aloko", price: "CFA 7" },
+          { name: "Mixed brochette platter", description: "Beef, chicken, sausage, six skewers total", price: "CFA 9" },
         ],
       },
       {
         section: "Sides",
         items: [
-          { name: "Aloko", description: "Fried sweet plantain, tomato sauce", price: "€2" },
-          { name: "Igname pilée", description: "Pounded yam, served with sauce of choice", price: "€3" },
-          { name: "Salade de crudités", description: "Tomato, onion, cucumber, vinaigrette", price: "€2" },
+          { name: "Aloko", description: "Fried sweet plantain, tomato sauce", price: "CFA 2" },
+          { name: "Igname pilée", description: "Pounded yam, served with sauce of choice", price: "CFA 3" },
+          { name: "Salade de crudités", description: "Tomato, onion, cucumber, vinaigrette", price: "CFA 2" },
         ],
       },
       {
         section: "Drinks",
         items: [
-          { name: "Flag beer", description: "Cold local lager", price: "€2" },
-          { name: "Sodabi", description: "Traditional palm spirit, served neat or mixed", price: "€2" },
-          { name: "Soft drinks", description: "Fanta, Coca-Cola, Sprite", price: "€1" },
+          { name: "Flag beer", description: "Cold local lager", price: "CFA 2" },
+          { name: "Sodabi", description: "Traditional palm spirit, served neat or mixed", price: "CFA 2" },
+          { name: "Soft drinks", description: "Fanta, Coca-Cola, Sprite", price: "CFA 1" },
         ],
       },
     ],

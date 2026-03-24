@@ -11,9 +11,9 @@ import type { Hotel } from "../data/hotels";
 import { useLang } from "../context/LanguageContext";
 
 const PRICE_FILTERS: Record<string, { min?: number; max?: number }> = {
-  "Under €80": { max: 79 },
-  "€80-€120":  { min: 80, max: 120 },
-  "Over €120": { min: 121 },
+  "Under CFA 8000": { max: 79 },
+  "CFA 8000 - CFA 12000":  { min: 80, max: 120 },
+  "Over CFA 12000": { min: 121 },
 };
 
 const COPY = {
@@ -25,7 +25,7 @@ const COPY = {
     starsLabel: "Stars",
     pricesLabel: "Budget",
     stars: ["All", "5 Stars", "4 Stars", "3 Stars"],
-    prices: ["All", "Under €80", "€80-€120", "Over €120"],
+    prices: ["All", "Under CFA 8000", "CFA 8000 - CFA 12000", "Over CFA 12000"],
     found: "found",
     noMatch: "No hotels match your filters",
     clear: "Clear all filters",
@@ -41,7 +41,7 @@ const COPY = {
     starsLabel: "Étoiles",
     pricesLabel: "Budget",
     stars: ["Tous", "5 étoiles", "4 étoiles", "3 étoiles"],
-    prices: ["Tous", "Moins de 80 €", "80 €-120 €", "Plus de 120 €"],
+    prices: ["Tous", "Moins de 8000 CFA ", "8000 CFA -12000 CFA ", "Plus de 12000 CFA "],
     found: "trouvés",
     noMatch: "Aucun hôtel ne correspond à vos filtres",
     clear: "Réinitialiser les filtres",
@@ -129,7 +129,7 @@ export function HotelsListingPage() {
             </div>
             <div className="flex gap-2">
               {copy.prices.map((price, i) => {
-                const value = i === 0 ? "All" : ["Under €80", "€80-€120", "Over €120"][i - 1];
+                const value = i === 0 ? "All" : ["Under CFA 8000", "CFA 8000 - CFA 12000", "Over CFA 12000"][i - 1];
                 return (
                 <button key={price} onClick={() => setPrice(value)}
                   className={`px-5 py-2.5 rounded-full transition-all ${selectedPrice === value ? "bg-[#C4622D] text-white" : "bg-white text-[#5C3A1E] border border-[rgba(92,58,30,0.15)] hover:border-[#C4622D]"}`}
@@ -196,7 +196,7 @@ export function HotelsListingPage() {
                           </div>
                           <div className="flex items-center justify-between">
                             <div>
-                              <span className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>€{hotel.price}</span>
+                              <span className="text-[#1A1A1A]" style={{ fontFamily: "var(--font-display)", fontSize: "20px" }}>CFA {hotel.price}</span>
                               <span className="text-[#5C3A1E]/70 text-sm" style={{ fontFamily: "var(--font-body)", fontWeight: 300 }}>{copy.perNight}</span>
                             </div>
                             <div className="flex items-center gap-1">
