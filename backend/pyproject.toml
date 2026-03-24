@@ -11,3 +11,7 @@ dependencies = [
     "sqlalchemy>=2.0.48",
     "sqlmodel>=0.0.37",
 ]
+
+
+[tool.setuptools]
+packages = ["app"]
